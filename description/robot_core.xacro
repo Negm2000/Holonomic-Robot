@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="inertial_macros.xacro"/>
+
+    <xacro:property name="chassisX" value="0.5"/> <!--Chassis Length-->
+    <xacro:property name="chassisY" value="0.3"/> <!--Chassis Width-->
+    <xacro:property name="chassisZ" value="0.25"/> <!--Chassis Height-->
+    <xacro:property name="BaseMass" value="6"/> <!-- Base mass = 6 kg -->
+    <xacro:property name="MecanumRadius" value="0.0485"/> <!-- Mecanum wheel diameter = 97mm -->
+    <xacro:property name="MecanumLength" value="0.045"/> <!-- Mecanum wheel thickness = 44.97 mm -->
+    <xacro:property name="MecanumMass" value="0.25"/> <!-- Mecanum wheel mass = 0.25 kg-->
+
+    <material name="black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+
+    <link name="base_link"></link> <!-- Base link is the origin of the robot, the center of mass and revolution -->
+
+    <joint name="chassis_joint" type="fixed">  
+        <parent link="base_link"/>
+        <child link="chassis"/>
+        <origin xyz="${-chassisX/2} 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="chassis">
+        <visual>
+            <geometry>
+                <box size="${chassisX} ${chassisY} ${chassisZ}"/>
+            </geometry>
+
+            <origin xyz="${chassisX/2} 0.0 ${chassisZ/2}"/> <!-- Chassis origin is the bottom center of the box -->
+            <material name="white"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="${chassisX} ${chassisY} ${chassisZ}"/>
+            </geometry>
+            <origin xyz="${chassisX/2} 0.0 ${chassisZ/2}"/> <!-- Chassis origin is the bottom center of the box -->
+        </collision>
+
+        <xacro:inertial_box mass="${BaseMass}" x="${chassisX}" y="${chassisY}" z="${chassisZ}">
+            <origin xyz="${chassisX/2} 0.0 ${chassisZ/2}"/>
+        </xacro:inertial_box>
+
+    </link>
+
+    <joint name="front_left_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="front_left_wheel"/>
+        <origin xyz="${-chassisX/2 + 0.9*chassisX} ${chassisY/2 + MecanumLength/2} 0.0" rpy="${-pi/2} 0 0"/> <!-- The origin of the wheel is the center of the cylinder -->
+        <axis xyz="0.0 0.0 1.0"/> <!-- The axis of rotation of the wheel -->
+    </joint>
+
+
+    <link name="front_left_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="${MecanumRadius}" length="${MecanumLength}"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <cylinder radius="${MecanumRadius}" length="${MecanumLength}"/>
+            </geometry>
+        </collision>
+
+        <xacro:inertial_cylinder mass="${MecanumMass}" radius="${MecanumRadius}" length="${MecanumLength}">
+            <origin xyz="0.0 0.0 0.0"/>
+        </xacro:inertial_cylinder>
+    </link>
+
+
+
+    <joint name="front_right_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="front_right_wheel"/>
+        <origin xyz="${-chassisX/2 + 0.9*chassisX} ${-chassisY/2 - MecanumLength/2} 0.0" rpy="${pi/2} 0 0"/> <!-- The origin of the wheel is the center of the cylinder -->
+        <axis xyz="0.0 0.0 -1.0"/> <!-- The axis of rotation of the wheel -->
+    </joint>
+
+
+    <link name="front_right_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="${MecanumRadius}" length="${MecanumLength}"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <cylinder radius="${MecanumRadius}" length="${MecanumLength}"/>
+            </geometry>
+        </collision>
+
+        <xacro:inertial_cylinder mass="${MecanumMass}" radius="${MecanumRadius}" length="${MecanumLength}">
+            <origin xyz="0.0 0.0 0.0"/>
+        </xacro:inertial_cylinder>
+    </link>
+
+
+    <joint name="back_left_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="back_left_wheel"/>
+        <origin xyz="${chassisX/2 - 0.9*chassisX} ${chassisY/2 + MecanumLength/2} 0.0" rpy="${-pi/2} 0 0"/> <!-- The origin of the wheel is the center of the cylinder -->
+        <axis xyz="0.0 0.0 1.0"/> <!-- The axis of rotation of the wheel -->
+    </joint>
+
+
+    <link name="back_left_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="${MecanumRadius}" length="${MecanumLength}"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <cylinder radius="${MecanumRadius}" length="${MecanumLength}"/>
+            </geometry>
+        </collision>
+
+        <xacro:inertial_cylinder mass="${MecanumMass}" radius="${MecanumRadius}" length="${MecanumLength}">
+            <origin xyz="0.0 0.0 0.0"/>
+        </xacro:inertial_cylinder>
+    </link>
+
+
+
+    <joint name="back_right_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="back_right_wheel"/>
+        <origin xyz="${chassisX/2 - 0.9*chassisX} ${-chassisY/2 - MecanumLength/2} 0.0" rpy="${pi/2} 0 0"/> <!-- The origin of the wheel is the center of the cylinder -->
+        <axis xyz="0.0 0.0 -1.0"/> <!-- The axis of rotation of the wheel -->
+    </joint>
+
+
+    <link name="back_right_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="${MecanumRadius}" length="${MecanumLength}"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <cylinder radius="${MecanumRadius}" length="${MecanumLength}"/>
+            </geometry>
+        </collision>
+
+        <xacro:inertial_cylinder mass="${MecanumMass}" radius="${MecanumRadius}" length="${MecanumLength}">
+            <origin xyz="0.0 0.0 0.0"/>
+        </xacro:inertial_cylinder>
+    </link>
+
+
+    
+</robot>
